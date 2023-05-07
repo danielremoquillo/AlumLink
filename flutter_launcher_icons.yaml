@@ -1,0 +1,6 @@
+flutter_icons:
+  image_path: "assets/icons/alumlink_launcher_icon.png"
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  resize_behavior: contain

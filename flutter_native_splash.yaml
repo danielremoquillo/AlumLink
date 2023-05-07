@@ -1,0 +1,7 @@
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/splash/alumlink_splash.png
+  branding: assets/splash/alumlink_branding.png
+  branding_mode: bottom
+  android: true
+  ios: true
