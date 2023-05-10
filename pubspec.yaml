@@ -64,6 +64,7 @@ flutter:
   assets:
     - assets/splash/alumlink_splash.png
     - assets/icons/alumlink_launcher_icon.png
+    - assets/images/alumlink_login_image.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
