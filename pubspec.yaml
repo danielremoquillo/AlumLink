@@ -65,6 +65,12 @@ flutter:
     - assets/splash/alumlink_splash.png
     - assets/icons/alumlink_launcher_icon.png
     - assets/images/alumlink_login_image.png
+    - assets/images/default_profile.jpg
+    - assets/images/sample_post.png
+    - assets/images/default_profile.png
+    - assets/images/mrbeast.jpg
+    - assets/images/mrbeast_logo.jpg
+
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
