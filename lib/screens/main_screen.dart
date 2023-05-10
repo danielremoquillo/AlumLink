@@ -10,7 +10,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _currentIndex = 3;
+  int _currentIndex = 0;
 
   final List<Widget> _children = [
     const HomeScreen(),
@@ -39,21 +39,10 @@ class _MainScreenState extends State<MainScreen> {
               color: Color(0xFF353535),
             ),
             activeIcon: Icon(
-              Icons.home_outlined,
+              Icons.home,
               color: Color(0xFF216831),
             ),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.forum_outlined,
-              color: Color(0xFF353535),
-            ),
-            activeIcon: Icon(
-              Icons.forum_outlined,
-              color: Color(0xFF216831),
-            ),
-            label: '',
+            label: 'Home',
           ),
           BottomNavigationBarItem(
             icon: Icon(
@@ -61,21 +50,21 @@ class _MainScreenState extends State<MainScreen> {
               color: Color(0xFF353535),
             ),
             activeIcon: Icon(
-              Icons.groups_outlined,
+              Icons.groups,
               color: Color(0xFF216831),
             ),
-            label: '',
+            label: 'Networks',
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.account_circle_outlined,
+              Icons.person_outline_outlined,
               color: Color(0xFF353535),
             ),
             activeIcon: Icon(
-              Icons.account_circle_outlined,
+              Icons.person,
               color: Color(0xFF216831),
             ),
-            label: '',
+            label: 'Account',
           ),
         ],
       ),
