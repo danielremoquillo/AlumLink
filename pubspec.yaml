@@ -33,6 +33,8 @@ dependencies:
   flutter_native_splash: ^2.2.19
   flutter_launcher_icons: ^0.13.1
 
+  google_fonts: ^4.0.4
+
   http: ^0.13.6
 
 

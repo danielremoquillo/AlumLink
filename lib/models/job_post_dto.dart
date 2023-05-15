@@ -6,7 +6,7 @@ class JobPostDTO {
   final String location;
   final String description;
   final double salary;
-  final UserDTO user;
+  final Map<String, dynamic> user;
 
   const JobPostDTO({
     required this.id,
@@ -24,7 +24,7 @@ class JobPostDTO {
       location: json['location'] as String,
       description: json['description'] as String,
       salary: json['salary'] as double,
-      user: json['user'] as UserDTO,
+      user: json['user'] as Map<String, dynamic>,
     );
   }
 }
