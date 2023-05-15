@@ -9,6 +9,13 @@ class _SearchBarState extends State<SearchBar> {
   final TextEditingController _searchController = TextEditingController();
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(

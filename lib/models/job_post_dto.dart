@@ -1,5 +1,3 @@
-import 'package:alumlink_app/models/user_dto.dart';
-
 class JobPostDTO {
   final int id;
   final String position;

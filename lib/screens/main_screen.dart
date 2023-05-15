@@ -1,4 +1,5 @@
 import 'package:alumlink_app/screens/account_screen.dart';
+import 'package:alumlink_app/screens/job_post_request_screen.dart';
 import 'package:alumlink_app/screens/job_screen.dart';
 import 'package:alumlink_app/widgets/profile_menu_button.dart';
 import 'package:alumlink_app/widgets/search_bar.dart';
@@ -77,9 +78,7 @@ class _MainScreenState extends State<MainScreen> {
             const SizedBox(width: 32.0),
             IconButton(
               icon: Icon(
-                _currentIndex == 2
-                    ? Icons.chat_bubble
-                    : Icons.chat_bubble_outline,
+                _currentIndex == 2 ? Icons.sms : Icons.sms_outlined,
                 color: const Color(0xFF216831),
               ),
               onPressed: () {
@@ -106,17 +105,29 @@ class _MainScreenState extends State<MainScreen> {
         backgroundColor: const Color(0xFF216831),
         child: const Icon(Icons.add),
         onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            builder: (context) {
-              return Container(
-                height: 200,
-                color: Colors.grey[200],
-                child: Center(
-                  child: Text('This is a BottomSheet'),
-                ),
-              );
-            },
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              transitionDuration: const Duration(milliseconds: 500),
+              pageBuilder: (context, animation, secondaryAnimation) {
+                return const JobPostRequestScreen();
+              },
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                var begin = Offset(0.0, 1.0);
+                var end = Offset.zero;
+                var curve = Curves.ease;
+
+                var tween = Tween(begin: begin, end: end);
+                var curvedAnimation =
+                    CurvedAnimation(parent: animation, curve: curve);
+
+                return SlideTransition(
+                  position: tween.animate(curvedAnimation),
+                  child: child,
+                );
+              },
+            ),
           );
         },
       ),

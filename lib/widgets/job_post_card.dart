@@ -157,20 +157,23 @@ class JobPostCard extends StatelessWidget {
                   style: TextButton.styleFrom(
                       shape: const RoundedRectangleBorder(
                           side: BorderSide(color: Color(0xFF216831)))),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(
-                        Icons.check_outlined,
-                        color: Color(0xFF216831),
-                      ),
-                      SizedBox(width: 8.0),
-                      Text(
-                        'Apply',
-                        style:
-                            TextStyle(color: Color(0xFF216831), fontSize: 12),
-                      ),
-                    ],
+                  child: Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(
+                          Icons.check_outlined,
+                          color: Color(0xFF216831),
+                        ),
+                        SizedBox(width: 8.0),
+                        Text(
+                          'Apply',
+                          style:
+                              TextStyle(color: Color(0xFF216831), fontSize: 12),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(
@@ -184,19 +187,22 @@ class JobPostCard extends StatelessWidget {
                       backgroundColor: const Color(0xFF216831),
                       shape: const RoundedRectangleBorder(
                           side: BorderSide(color: Color(0xFF216831)))),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(
-                        Icons.chat_bubble_outline_outlined,
-                        color: Colors.white,
-                      ),
-                      SizedBox(width: 8.0),
-                      Text(
-                        'Message',
-                        style: TextStyle(color: Colors.white, fontSize: 12),
-                      ),
-                    ],
+                  child: Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(
+                          Icons.chat_bubble_outline_outlined,
+                          color: Colors.white,
+                        ),
+                        SizedBox(width: 8.0),
+                        Text(
+                          'Message',
+                          style: TextStyle(color: Colors.white, fontSize: 12),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
