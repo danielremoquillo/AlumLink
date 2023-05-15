@@ -1,6 +1,10 @@
+import 'package:alumlink_app/models/user.dart';
 import 'package:alumlink_app/screens/signup_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -17,14 +21,89 @@ class _SignInScreenState extends State<SignInScreen> {
   String _errorTextEmail = '';
   String _errorTextPass = '';
 
-  void _submitForm() {
+  late User user;
+
+  void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      // Do something with the form data, such as submitting it to a server
-      //   Navigator.pushAndRemoveUntil(context,
-      //       MaterialPageRoute(builder: (context) {
+      try {
+        if (_email != '' && _password != '') {
+          await signInUser(_email, _password);
+        }
+      } catch (error) {
+        print(error);
+      }
+    }
+  }
 
-      //   }), (route) => false);
+  void showError(BuildContext context, String description,
+      {String title = 'Signing Failed'}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text(title),
+          content: Text(description),
+          actions: <Widget>[
+            TextButton(
+              child: Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  //Sign In
+  Future<void> signInUser(String email, String password) async {
+    //Show a loading circular progress indicator which indicates the process of logging in
+    showDialog(
+        context: context,
+        builder: (context) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        });
+
+    try {
+      //Logging
+      final response = await http.post(
+        Uri.parse('https://alumlink.onrender.com/api/v1/auth/login'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'email': email,
+          'password': password,
+        }),
+      );
+
+      //Response handler
+      if (response.statusCode == 200) {
+        Navigator.pop(context);
+        user = User.fromJson(jsonDecode(response.body));
+        print(user.name);
+      } else if (response.statusCode == 401) {
+        Navigator.pop(context);
+        showError(context, 'Invalid Password or Email');
+      } else if (response.statusCode == 404) {
+        Navigator.pop(context);
+
+        showError(context, 'Account not exist');
+      }
+    } on Exception catch (e) {
+      Navigator.pop(context);
+      if (e.toString().contains('Failed host lookup')) {
+        showError(context,
+            'Unable to connect. Please check your internet connection and try again.',
+            title: 'Connection Failed');
+      } else {
+        showError(context, e.toString());
+      }
     }
   }
 
@@ -103,14 +182,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                     _errorTextEmail = 'Please enter your email';
                                   });
                                 }
-                                if (!RegExp(
-                                        r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                    .hasMatch(value)) {
-                                  setState(() {
-                                    _errorTextEmail =
-                                        'Please enter a valid email';
-                                  });
-                                }
+
                                 return null;
                               },
 

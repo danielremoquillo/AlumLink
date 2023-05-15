@@ -1,4 +1,5 @@
 import 'package:alumlink_app/screens/main_screen.dart';
+import 'package:alumlink_app/screens/signin_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'AlumLink',
       theme: ThemeData(primarySwatch: Colors.green, fontFamily: 'Open Sans'),
-      home: const MainScreen(),
+      home: const SignInScreen(),
     );
   }
 }

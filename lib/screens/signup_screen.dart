@@ -1,4 +1,7 @@
+import 'package:alumlink_app/screens/signin_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -22,14 +25,85 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool _isValidEmail = false;
 
   //Process the data
-  void _submitForm() {
+  void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      // Do something with the form data, such as submitting it to a server
-      //   Navigator.pushAndRemoveUntil(context,
-      //       MaterialPageRoute(builder: (context) {
+      try {
+        if (_name != '' && _email != '' && _password != '') {
+          await signUpUser(_email, _name, _password);
+        }
+      } catch (error) {
+        print(error);
+      }
+    }
+  }
 
-      //   }), (route) => false);
+  void showResult(BuildContext context, String description,
+      {String title = 'Registration Complete'}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text(title),
+          content: Text(description),
+          actions: <Widget>[
+            TextButton(
+              child: Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  //Sign up
+  Future<void> signUpUser(String email, String name, String password) async {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        });
+
+    try {
+      final response = await http.post(
+        Uri.parse('https://alumlink.onrender.com/api/v1/auth/register'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'email': email,
+          'name': name,
+          'password': password,
+        }),
+      );
+
+      //Response handler
+      if (response.statusCode == 200) {
+        Navigator.pop(context);
+        showResult(
+          context,
+          'Please proceed to sign in page to continue.',
+        );
+        Navigator.pushAndRemoveUntil(context,
+            MaterialPageRoute(builder: (context) {
+          return SignInScreen();
+        }), (route) => false);
+      }
+    } on Exception catch (e) {
+      Navigator.pop(context);
+      if (e.toString().contains('Failed host lookup')) {
+        showResult(context,
+            'Unable to connect. Please check your internet connection and try again.',
+            title: 'Connection Failed');
+      } else {
+        showResult(context, e.toString());
+      }
     }
   }
 
@@ -319,8 +393,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     suffixIcon: IconButton(
                                       icon: Icon(
                                         _showPassword
-                                            ? Icons.visibility
-                                            : Icons.visibility_off,
+                                            ? Icons.visibility_outlined
+                                            : Icons.visibility_off_outlined,
                                         color: Colors.grey,
                                       ),
                                       onPressed: () {
