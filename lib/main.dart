@@ -1,16 +1,25 @@
-import 'package:alumlink_app/screens/job_post_request_screen.dart';
+import 'package:alumlink_app/providers/session_provider.dart';
 import 'package:alumlink_app/screens/main_screen.dart';
+
 import 'package:alumlink_app/screens/signin_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   //Splash Screen Timeout
   FlutterNativeSplash.remove();
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => SessionProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -25,7 +34,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.green,
         textTheme: GoogleFonts.poppinsTextTheme(),
       ),
-      home: const MainScreen(),
+      home: const SignInScreen(),
     );
   }
 }

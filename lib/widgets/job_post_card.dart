@@ -1,8 +1,9 @@
 import 'package:alumlink_app/models/job_post_dto.dart';
+import 'package:alumlink_app/providers/session_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
-class JobPostCard extends StatelessWidget {
+class JobPostCard extends StatefulWidget {
   const JobPostCard(
       {super.key,
       this.profileImage = 'assets/images/default_profile.png',
@@ -12,7 +13,16 @@ class JobPostCard extends StatelessWidget {
   final String profileImage;
 
   @override
+  State<JobPostCard> createState() => _JobPostCardState();
+}
+
+class _JobPostCardState extends State<JobPostCard> {
+  bool isBookMarked = false;
+  @override
   Widget build(BuildContext context) {
+    final int userId =
+        Provider.of<SessionProvider>(context, listen: false).user.id;
+
     return Container(
       decoration: BoxDecoration(
         border: Border.all(
@@ -40,8 +50,8 @@ class JobPostCard extends StatelessWidget {
                       decoration: BoxDecoration(
                           borderRadius:
                               const BorderRadius.all(Radius.circular(10)),
-                          image:
-                              DecorationImage(image: AssetImage(profileImage))),
+                          image: DecorationImage(
+                              image: AssetImage(widget.profileImage))),
                     ),
                     const SizedBox(
                       width: 15,
@@ -50,14 +60,14 @@ class JobPostCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          jobPostDTO.user['name'],
+                          widget.jobPostDTO.user['name'],
                           style: const TextStyle(
                               fontWeight: FontWeight.w600,
                               color: Color(0xFF353535),
                               fontSize: 14),
                         ),
                         Text(
-                          jobPostDTO.user['email'],
+                          widget.jobPostDTO.user['email'],
                           style: const TextStyle(
                               fontWeight: FontWeight.w100,
                               fontSize: 14,
@@ -67,10 +77,29 @@ class JobPostCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                const Icon(
-                  Icons.bookmark_outline_outlined,
-                  color: Color(0xFF216831),
-                )
+                userId == widget.jobPostDTO.user['id']
+                    ? IconButton(
+                        icon: Icon(
+                          Icons.more_horiz,
+                          size: 30,
+                          color: const Color(0xFF216831),
+                        ),
+                        onPressed: () {},
+                      )
+                    : IconButton(
+                        icon: Icon(
+                          isBookMarked
+                              ? Icons.bookmark
+                              : Icons.bookmark_add_outlined,
+                          size: 30,
+                          color: const Color(0xFF216831),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            isBookMarked = !isBookMarked;
+                          });
+                        },
+                      ),
               ],
             ),
           ),
@@ -81,7 +110,7 @@ class JobPostCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  jobPostDTO.position,
+                  widget.jobPostDTO.position,
                   style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -106,7 +135,7 @@ class JobPostCard extends StatelessWidget {
                               color: Color(0xFF353535)),
                         ),
                         Text(
-                          '${jobPostDTO.salary.floor()}',
+                          '${widget.jobPostDTO.salary.floor()}',
                           style: const TextStyle(
                               fontSize: 13, color: Color(0xFF353535)),
                         ),
@@ -126,7 +155,7 @@ class JobPostCard extends StatelessWidget {
                               color: Color(0xFF353535)),
                         ),
                         Text(
-                          jobPostDTO.location,
+                          widget.jobPostDTO.location,
                           style: const TextStyle(
                               fontSize: 13, color: Color(0xFF353535)),
                         ),
@@ -138,7 +167,7 @@ class JobPostCard extends StatelessWidget {
                   height: 20,
                 ),
                 Text(
-                  jobPostDTO.description,
+                  widget.jobPostDTO.description,
                   style:
                       const TextStyle(fontSize: 13, color: Color(0xFF353535)),
                 ),

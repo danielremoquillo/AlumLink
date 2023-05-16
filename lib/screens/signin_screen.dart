@@ -1,8 +1,13 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:alumlink_app/models/user.dart';
+import 'package:alumlink_app/providers/session_provider.dart';
+import 'package:alumlink_app/screens/main_screen.dart';
 import 'package:alumlink_app/screens/signup_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -23,6 +28,55 @@ class _SignInScreenState extends State<SignInScreen> {
 
   late User user;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserSession();
+  }
+
+  void getUserSession() async {
+    final prefs = await SharedPreferences.getInstance();
+    final int? id = prefs.getInt('id');
+    final String? name = prefs.getString('name');
+    final String? email = prefs.getString('email');
+    final String? password = prefs.getString('password');
+
+    if (id != null) {
+      final User user =
+          User(id: id, name: name!, email: email!, password: password!);
+      //Sets up to user class inside provider
+      context.read<SessionProvider>().setUser(user);
+
+      Navigator.pushAndRemoveUntil(
+        context,
+        PageRouteBuilder(
+          transitionDuration: const Duration(milliseconds: 500),
+          pageBuilder: (context, animation, secondaryAnimation) {
+            return const MainScreen();
+          },
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            var begin = 0.0;
+            var end = 1.0;
+            var curve = Curves.ease;
+
+            var tween = Tween(begin: begin, end: end);
+            var curvedAnimation =
+                CurvedAnimation(parent: animation, curve: curve);
+
+            return FadeTransition(
+              opacity: tween.animate(curvedAnimation),
+              child: child,
+            );
+          },
+        ),
+        (route) => false,
+      );
+    } else {
+      print('No session found.');
+    }
+  }
+
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
@@ -34,6 +88,16 @@ class _SignInScreenState extends State<SignInScreen> {
         print(error);
       }
     }
+  }
+
+  Future<void> setUserSession(User user) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('id', user.id);
+    await prefs.setString('email', user.email);
+    await prefs.setString('name', user.name);
+    await prefs.setString('password', user.password);
+
+    print('Set Success');
   }
 
   void showError(BuildContext context, String description,
@@ -86,7 +150,36 @@ class _SignInScreenState extends State<SignInScreen> {
       if (response.statusCode == 200) {
         Navigator.pop(context);
         user = User.fromJson(jsonDecode(response.body));
-        print(user.name);
+
+        //Set up session
+        setUserSession(user);
+
+        //Pushes mainscreen
+        Navigator.pushAndRemoveUntil(
+          context,
+          PageRouteBuilder(
+            transitionDuration: const Duration(milliseconds: 500),
+            pageBuilder: (context, animation, secondaryAnimation) {
+              return const MainScreen();
+            },
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              var begin = 0.0;
+              var end = 1.0;
+              var curve = Curves.ease;
+
+              var tween = Tween(begin: begin, end: end);
+              var curvedAnimation =
+                  CurvedAnimation(parent: animation, curve: curve);
+
+              return FadeTransition(
+                opacity: tween.animate(curvedAnimation),
+                child: child,
+              );
+            },
+          ),
+          (route) => false,
+        );
       } else if (response.statusCode == 401) {
         Navigator.pop(context);
         showError(context, 'Invalid Password or Email');

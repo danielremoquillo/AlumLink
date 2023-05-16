@@ -1,10 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:alumlink_app/models/job_post_request.dart';
+import 'package:alumlink_app/providers/session_provider.dart';
 import 'package:alumlink_app/screens/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:provider/provider.dart';
 
 class JobPostRequestScreen extends StatefulWidget {
   const JobPostRequestScreen({super.key});
@@ -82,7 +84,8 @@ class _JobPostRequestScreenState extends State<JobPostRequestScreen> {
           "location": _location,
           "description": _description,
           "salary": _salary,
-          "user_id": 4,
+          "user_id":
+              Provider.of<SessionProvider>(context, listen: false).user.id,
         }),
       );
 

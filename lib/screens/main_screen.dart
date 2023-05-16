@@ -20,6 +20,7 @@ class _MainScreenState extends State<MainScreen> {
     const JobScreen(),
     const JobScreen(),
     const AccountScreen(),
+    const AccountScreen(),
   ];
 
   void onTabTapped(int index) {

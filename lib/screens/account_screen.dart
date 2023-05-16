@@ -1,7 +1,32 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: use_build_context_synchronously
 
-class AccountScreen extends StatelessWidget {
+import 'package:alumlink_app/providers/session_provider.dart';
+import 'package:alumlink_app/screens/signin_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
+
+  @override
+  State<AccountScreen> createState() => _AccountScreenState();
+}
+
+class _AccountScreenState extends State<AccountScreen> {
+  void _signOutUser() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    //Clearing session
+    await prefs.remove('id');
+    await prefs.remove('name');
+    await prefs.remove('email');
+    await prefs.remove('password');
+
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) {
+      return const SignInScreen();
+    }), (route) => false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +67,9 @@ class AccountScreen extends StatelessWidget {
               SizedBox(
                 width: 5,
               ),
+              Text(
+                  '${Provider.of<SessionProvider>(context, listen: false).user.email}'),
+              TextButton(onPressed: _signOutUser, child: Text('logout'))
             ],
           ),
         ),
