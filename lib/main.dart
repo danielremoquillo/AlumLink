@@ -1,5 +1,4 @@
 import 'package:alumlink_app/providers/session_provider.dart';
-import 'package:alumlink_app/screens/main_screen.dart';
 
 import 'package:alumlink_app/screens/signin_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,7 +10,9 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   //Splash Screen Timeout
+  await Future.delayed(const Duration(seconds: 1));
   FlutterNativeSplash.remove();
+
   runApp(
     MultiProvider(
       providers: [

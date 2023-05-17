@@ -45,6 +45,7 @@ class _SignInScreenState extends State<SignInScreen> {
     if (id != null) {
       final User user =
           User(id: id, name: name!, email: email!, password: password!);
+      print(user.name);
       //Sets up to user class inside provider
       context.read<SessionProvider>().setUser(user);
 
@@ -97,7 +98,7 @@ class _SignInScreenState extends State<SignInScreen> {
     await prefs.setString('name', user.name);
     await prefs.setString('password', user.password);
 
-    print('Set Success');
+    context.read<SessionProvider>().setUser(user);
   }
 
   void showError(BuildContext context, String description,
